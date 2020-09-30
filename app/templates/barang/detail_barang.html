@@ -1,0 +1,59 @@
+{% import "bootstrap/utils.html" as utils %}
+{% extends "base.html" %}
+{% block title %}Profil {{current_user.username}} {% endblock %}
+{% block body %}
+
+<div class="tile is-ancestor">
+    <div class="tile is-parent is-4">
+        <div class="tile is-child box has-background-light is-shadowless">
+            {% for detail in barang %}
+            <div class="box">
+                <figure class="image is-1by1">
+                    <img src="{{ detail.foto_barang }}" alt="{{ detail.nama_barang }}">
+                </figure>
+            </div>
+        </div>
+    </div>
+    <div class="tile is-parent">
+        <div class="tile is-child box has-background-white is-shadowless">
+            <div class="title">{{ detail.nama_barang }}</div>
+            <span class=" title is-4 has-text-danger">{{ "Rp {:,}".format(detail.harga_barang).replace(',','.') }}</span>
+            <br><br>
+            <table class="table is-fullwidth">
+                <tbody>
+                    <tr>
+                        <td>Penjual</td>
+                        <th>{{ detail.barang.username }}</th>
+                    </tr>
+                    <tr>
+                        <td>Kontak</td>
+                        <th>{{ detail.barang.no_hp }}</th>
+                    </tr>
+                    <tr>
+                        <td>Fakultas</td>
+                        <th>{{ detail.jurusan.fakultas.nama_fakultas }}</th>
+                    </tr>
+                    <tr>
+                        <td>Jurusan</td>
+                        <th>{{ detail.jurusan.nama_jurusan }}</th>
+                    </tr>
+                    <tr>
+                        <td>Garansi</td>
+                        <th>
+                            {% if detail.garansi_barang %}
+                                Ada
+                            {% else %}
+                                Tidak ada
+                            {% endif %}
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
+
+            <a class="button is-primary is-outlined" href="{{ url_for('barang.edit_barang', idbarang=detail.id_barang) }}">Edit</a>
+
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

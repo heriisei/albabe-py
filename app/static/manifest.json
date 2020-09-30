@@ -1,0 +1,13 @@
+{
+    "name": "Albabe",
+    "short_name": "Albabe",
+    "icons": [{
+        "src": "http://127.0.0.1:5000/static/img/albabe-i.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      }],
+    "start_url": "http://127.0.0.1:5000",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff"
+}

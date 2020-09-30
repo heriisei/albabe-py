@@ -1,0 +1,87 @@
+{% import "bootstrap/wtf.html" as wtf %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css"> -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    <title>{{ title }} | Albabe</title>
+    <!-- Bootstrap core CSS -->
+  <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+  <link href="{{ url_for('static', filename='css/ie10-viewport-bug-workaround.css') }}" rel="stylesheet">
+  <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+  <script src="{{ url_for('static', filename='js/ie-emulation-modes-warning.js.download') }}"></script>
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+    <nav class="navbar is-link" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="{{ url_for('home.homepage') }}">
+                <img src="{{ url_for('static', filename='img/albabe.png') }}" alt="Albabe | Jual Beli Barang Bekas" width="auto" height="100">
+            </a>
+        
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        
+        <div id="navbarBasicExample" class="navbar-menu">        
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a class="navbar_item button is-link is-inverted is-outlined" href="{{ url_for('barang.jual_barang') }}">Jual Barang</a>
+                        {% if current_user.is_authenticated %}
+                            {% if current_user.is_admin %}
+                                <a class="navbar_item button is-link is-inverted is-outlined" href="{{ url_for('admin.dashboard') }}">Dashboard</a>
+                            {% endif %}
+                            <a class="navbar_item button is-link is-inverted is-outlined" href="{{ url_for('user.profil', u=current_user.username) }}"><i class="far fa-user"></i>&nbsp;{{ current_user.username }}</a>
+                            <a class="navbar_item button is-danger is-inverted is-outlined" href="{{ url_for('auth.logout') }}">Log out</a>
+                        {% else %}
+                        <a class="button is-primary" href="{{ url_for('auth.register') }}"><strong>Daftar</strong></a>
+                        <a class="button is-light" href="{{ url_for('auth.login') }}">Masuk</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <section class="section">
+    <div class="columns is-desktop">
+    <div class="column">Register
+
+        {{ wtf.quick_form(form) }}
+
+        <script>
+            let fakultas_select = document.getElementById('fakultas');
+            let jurusan_select = document.getElementById('jurusan');
+
+            fakultas_select.onchange = function () {
+                idfakultas = fakultas_select.value;
+
+                fetch('/jurusan/' + idfakultas).then(function(response) {
+                    response.json().then(function(data) {
+                        let optionHTML = '';
+
+                        for (let jur of data.jurusan) {
+                            optionHTML +=  '<option value="' + parseInt(jur.id_jurusan) + '">' + jur.nama_jurusan + '</option>';
+                        }
+
+                        jurusan_select.innerHTML = optionHTML;
+                    });
+                });
+            }
+        </script>
+    </div>
+</div>
+</section>
+</body>
+</html>
+
